@@ -1,0 +1,494 @@
+{
+	"info": {
+		"_postman_id": "8d8a8822-9652-466f-852e-b7a754e5ad38",
+		"name": "marc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Lists all available versions of OneAgent installer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization:",
+						"value": "Api-Token {{apiToken }}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{tenant}}/api/v1/deployment/installer/agent/versions/:osType/:installerType?flavor=default&arch=all",
+					"host": [
+						"{{tenant}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"deployment",
+						"installer",
+						"agent",
+						"versions",
+						":osType",
+						":installerType"
+					],
+					"query": [
+						{
+							"key": "flavor",
+							"value": "default",
+							"description": "The flavor of your Linux distribution. \n\n Set `musl` for Linux distributions, which are using the musl C standard library, for example Alpine Linux. \n\n Only applicable to the `paas` and `paas-sh` installer types."
+						},
+						{
+							"key": "arch",
+							"value": "all",
+							"description": "The architecture of your OS: \n\n* `all`: Defaults to `ppc` for AIX or to `x86` for other OS types. \n* `x86`: x86 architecture.\n* `ppc`: PowerPC architecture, only supported for AIX and Linux.\n* `ppcle`: PowerPC Little Endian architecture, only supported for Linux.\n* `sparc`: Sparc architecture, only supported for Solaris. \n\n* `arm`: ARM architecture, only supported for Linux. \n\n* `s390`: S/390 architecture, only supported for Linux. \n\nOnly applicable to the `paas` and `paas-sh` installer types."
+						}
+					],
+					"variable": [
+						{
+							"key": "osType",
+							"value": "<string>",
+							"description": "(Required) The operating system of the installer."
+						},
+						{
+							"key": "installerType",
+							"value": "<string>",
+							"description": "(Required) The type of the installer: \n\n* `default`: Self-extracting installer for manual installation. Downloads an `.exe` file for Windows or an `.sh` file for Unix. \n* `default-unattended`: Self-extracting installer for unattended installation. Windows only. Downloads a `.zip` archive, containing the `.msi` installer and the batch file. This option is deprecated with OneAgent version 1.173 \n* `paas`: Code modules installer. Downloads a `*.zip` archive, containing the `manifest.json` file with meta information. \n* `paas-sh`: Code modules installer. Downloads a self-extracting shell script with the embedded `tar.gz` archive."
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success. The payload contains the available versions.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v1/deployment/installer/agent/versions/:osType/:installerType?flavor=default&arch=all",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"deployment",
+								"installer",
+								"agent",
+								"versions",
+								":osType",
+								":installerType"
+							],
+							"query": [
+								{
+									"key": "flavor",
+									"value": "default"
+								},
+								{
+									"key": "arch",
+									"value": "all"
+								}
+							],
+							"variable": [
+								{
+									"key": "osType"
+								},
+								{
+									"key": "installerType"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"availableVersions\": [\n  \"<string>\",\n  \"<string>\"\n ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Marc - Lists the number of open problems, split by impact level",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Api-Token: {{api-token }}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{tenant}}/api/v1/problem/status",
+					"host": [
+						"{{tenant}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"problem",
+						"status"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v1/problem/status",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"problem",
+								"status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Lists the number of open problems, split by impact level",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Api-Token: {{api-token }}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{tenant}}/api/v1/problem/status",
+					"host": [
+						"{{tenant}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"problem",
+						"status"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v1/problem/status",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"problem",
+								"status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		},
+		{
+			"name": "Lists all available metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{tenant}}/api/v2/metrics?pageSize=10&api-token={{apiToken }}",
+					"host": [
+						"{{tenant}}"
+					],
+					"path": [
+						"api",
+						"v2",
+						"metrics"
+					],
+					"query": [
+						{
+							"key": "nextPageKey",
+							"value": "<string>",
+							"description": "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+							"disabled": true
+						},
+						{
+							"key": "pageSize",
+							"value": "10",
+							"description": "The desired amount of primary entities in a single response payload. \n\nThe maximal allowed page size is `1000`. \n\nIf not set, `100` is used."
+						},
+						{
+							"key": "metricSelector",
+							"value": "<string>",
+							"description": "Selects metrics for the query by their keys.\n\n You can specify multiple metric keys separated by commas (for example, `metrickey1,metrickey2`). To select multiple metrics belonging to the same parent, list the last part of the required metric keys in parentheses, separated by commas, while keeping the common part untouched. For example, to list the `builtin:host.cpu.idle` and `builtin:host.cpu.user` metric, write: `builtin:host.cpu.(idle,user)`. \n\nYou can select a full set of related metrics by using a trailing asterisk (`*`) wildcard. For example, `builtin:host.*` selects all host-based metrics and `builtin:*` selects all Dynatrace-provided metrics. \n\nYou can set additional transformation operators, separated by a colon (`:`). See the [Metrics API - selector transformations help page](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) for additional information on available result transformations.\n\n The length of the string is limited to 1,000 characters.\n\n To find metrics based on a search term, rather than metricID, use the **text** query parameter instead of this one.",
+							"disabled": true
+						},
+						{
+							"key": "text",
+							"value": "<string>",
+							"description": "Metric registry search term. Only show metrics that contain the term in their ID, display name, or description. Use the `metricSelector` parameter instead of this one to select a complete metric hierarchy instead of doing a text-based search.",
+							"disabled": true
+						},
+						{
+							"key": "fields",
+							"value": "<string>",
+							"description": "Defines the list of metric properties included in the response. \n\n`metricId` is **always** included in the result. The following additional properties are available: \n\n* `displayName`: The name of the metric in the user interface. Enabled by default. \n* `description`: A short description of the metric. Enabled by default. \n* `unit`: The unit of the metric. Enabled by default. \n* `aggregationTypes`: The list of allowed aggregations for the metric. Note that it may be different after a [transformation](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) is applied. \n* `defaultAggregation`: The default aggregation of the metric. It is used when no aggregation is specified or the `:auto` transformation is set. \n* `dimensionDefinitions`: The fine metric division (for example, process group and process ID for some process-related metric). \n* `transformations`: A list of [transformations](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) that can be applied to the metric.\n* `entityType`: A list of entity types supported by the metric.\n\nTo add properties, list them with leading plus `+`. To exclude default properties, list them with leading minus `-`. \n\nTo specify several properties, join them with a comma (for example `fields=+aggregationTypes,-description`).\n\nIf you specify just one property, the response contains the metric key and the specified property.To return metric keys only, specify `metricId` here.",
+							"disabled": true
+						},
+						{
+							"key": "api-token",
+							"value": "{{apiToken }}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Not acceptable. The requested media type is not supported. Check the **Accept** header of your request.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v2/metrics?nextPageKey=<string>&pageSize=<long>&metricSelector=<string>&text=<string>&fields=<string>",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"metrics"
+							],
+							"query": [
+								{
+									"key": "nextPageKey",
+									"value": "<string>"
+								},
+								{
+									"key": "pageSize",
+									"value": "<long>"
+								},
+								{
+									"key": "metricSelector",
+									"value": "<string>"
+								},
+								{
+									"key": "text",
+									"value": "<string>"
+								},
+								{
+									"key": "fields",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Not Acceptable",
+					"code": 406,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Not found. The requested resource is not found or the query is incorrect.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v2/metrics?nextPageKey=<string>&pageSize=<long>&metricSelector=<string>&text=<string>&fields=<string>",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"metrics"
+							],
+							"query": [
+								{
+									"key": "nextPageKey",
+									"value": "<string>"
+								},
+								{
+									"key": "pageSize",
+									"value": "<long>"
+								},
+								{
+									"key": "metricSelector",
+									"value": "<string>"
+								},
+								{
+									"key": "text",
+									"value": "<string>"
+								},
+								{
+									"key": "fields",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v2/metrics?nextPageKey=<string>&pageSize=<long>&metricSelector=<string>&text=<string>&fields=<string>",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"metrics"
+							],
+							"query": [
+								{
+									"key": "nextPageKey",
+									"value": "<string>"
+								},
+								{
+									"key": "pageSize",
+									"value": "<long>"
+								},
+								{
+									"key": "metricSelector",
+									"value": "<string>"
+								},
+								{
+									"key": "text",
+									"value": "<string>"
+								},
+								{
+									"key": "fields",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				},
+				{
+					"name": "Syntax or validation error. **metricSelector** or **fields** have syntactic or semantic errors.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{tenant}}/api/v2/metrics?nextPageKey=<string>&pageSize=<long>&metricSelector=<string>&text=<string>&fields=<string>",
+							"host": [
+								"{{tenant}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"metrics"
+							],
+							"query": [
+								{
+									"key": "nextPageKey",
+									"value": "<string>"
+								},
+								{
+									"key": "pageSize",
+									"value": "<long>"
+								},
+								{
+									"key": "metricSelector",
+									"value": "<string>"
+								},
+								{
+									"key": "text",
+									"value": "<string>"
+								},
+								{
+									"key": "fields",
+									"value": "<string>"
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "text",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/plain"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		}
+	],
+	"protocolProfileBehavior": {}
+}
