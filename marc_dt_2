@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8d8a8822-9652-466f-852e-b7a754e5ad38",
 		"name": "marc",
-		"description": "v1.1 - Marc",
+		"description": "version=1.0 - This is Marc's Postman collection for Dynatrace",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
