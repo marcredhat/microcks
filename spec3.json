@@ -1,0 +1,2772 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Dynatrace Environment API",
+    "description" : "\nDocumentation of the Dynatrace Environment API v2. Resources here generally supersede those in v1. Migration of resources from v1 is in progress. If you miss a resource, consider using the Dynatrace Environment API v1. Refer to the [help page](https://www.dynatrace.com/support/help/shortlink/env-api) to read about use cases and examples.\n\nNotes about compatibility:\n* Operations marked as early adopter or preview may be changed in non-compatible ways, although we try to avoid this.\n* We may add new enum constants without incrementing the API version; thus, clients need to handle unknown enum constants gracefully.",
+    "version" : "2.0"
+  },
+  "servers" : [ {
+    "url" : "https://eye15053.live.dynatrace.com/api/v2",
+    "variables" : { }
+  } ],
+  "security" : [ {
+    "Api-Token" : [ ]
+  } ],
+  "tags" : [ {
+    "name" : "Metrics",
+    "description" : "Read metrics and their data points"
+  }, {
+    "name" : "Audit logs",
+    "description" : "Read audit logs"
+  }, {
+    "name" : "Network zones",
+    "description" : "Manage network zones"
+  }, {
+    "name" : "Monitored entities",
+    "description" : "Manage monitored entities"
+  }, {
+    "name" : "ActiveGates",
+    "description" : "View information about your ActiveGates"
+  }, {
+    "name" : "ActiveGates - Auto-update jobs",
+    "description" : "Manage ActiveGate auto-update jobs."
+  }, {
+    "name" : "Monitored entities - Custom tags",
+    "description" : "Manage custom tags of monitored entities"
+  } ],
+  "paths" : {
+    "/activeGates/updateJobs" : {
+      "get" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "List ActiveGates with update jobs | maturity=EARLY_ADOPTER",
+        "description" : "The response includes ActiveGates that have both completed (successful and failed) jobs and jobs in progress.",
+        "operationId" : "getAllUpdateJobList",
+        "parameters" : [ {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start of the requested timeframe for update jobs. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the relative timeframe of one day is used (`now-1d`). \n\nMaximum timeframe is 31 days.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end of the requested timeframe for update jobs. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the current timestamp is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "startVersionCompareType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update jobs by the specified initial version. \n\n Specify the comparison operator here.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "EQUAL", "GREATER", "GREATER_EQUAL", "LOWER", "LOWER_EQUAL" ],
+            "default" : "EQUAL"
+          }
+        }, {
+          "name" : "startVersion",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the initial version (required format `<major>.<minor>.<revision>`).",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "updateType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the update type.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE_GATE", "REMOTE_PLUGIN_AGENT", "SYNTHETIC", "Z_REMOTE" ]
+          },
+          "example" : "ACTIVE_GATE"
+        }, {
+          "name" : "targetVersionCompareType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update jobs by the specified target version. \n\n Specify the comparison operator here.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "EQUAL", "GREATER", "GREATER_EQUAL", "LOWER", "LOWER_EQUAL" ],
+            "default" : "EQUAL"
+          }
+        }, {
+          "name" : "targetVersion",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the target version (required format `<major>.<minor>.<revision>`).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateJobsAll"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.read` (Read ActiveGates using API V2)" ]
+      }
+    },
+    "/activeGates/{agId}/updateJobs/{jobId}" : {
+      "get" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "Gets the parameters of the specified update job | maturity=EARLY_ADOPTER",
+        "operationId" : "getUpdateJobByJobIdForAg",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "jobId",
+          "in" : "path",
+          "description" : "A unique identifier for a update-job of ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateJob"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found. See response body for details.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.read` (Read ActiveGates using API V2)" ]
+      },
+      "delete" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "Deletes the specified update job | maturity=EARLY_ADOPTER",
+        "operationId" : "deleteUpdateJobByJobIdForAg",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "jobId",
+          "in" : "path",
+          "description" : "A unique identifier for a update-job of ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Success. The update-job have been deleted. Response doesn't have a body."
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found. See response body for details.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.write` (Write ActiveGates using API V2)" ]
+      }
+    },
+    "/activeGates/{agId}/updateJobs" : {
+      "get" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "Lists update jobs for the specified ActiveGate | maturity=EARLY_ADOPTER",
+        "description" : "The job can update the ActiveGate to the specified version or the latest available one.",
+        "operationId" : "getUpdateJobListByAgId",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start of the requested timeframe for update jobs. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the relative timeframe of one week is used (`now-1w`). \n\nMaximum timeframe is 31 days.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end of the requested timeframe for update jobs. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the current timestamp is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "startVersionCompareType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update jobs by the specified initial version. \n\n Specify the comparison operator here.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "EQUAL", "GREATER", "GREATER_EQUAL", "LOWER", "LOWER_EQUAL" ],
+            "default" : "EQUAL"
+          }
+        }, {
+          "name" : "startVersion",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the initial version (required format `<major>.<minor>.<revision>`).",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "updateType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the update type.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "ACTIVE_GATE", "REMOTE_PLUGIN_AGENT", "SYNTHETIC", "Z_REMOTE" ]
+          },
+          "example" : "ACTIVE_GATE"
+        }, {
+          "name" : "targetVersionCompareType",
+          "in" : "query",
+          "description" : "Filters the resulting set of update jobs by the specified target version. \n\n Specify the comparison operator here.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "EQUAL", "GREATER", "GREATER_EQUAL", "LOWER", "LOWER_EQUAL" ],
+            "default" : "EQUAL"
+          }
+        }, {
+          "name" : "targetVersion",
+          "in" : "query",
+          "description" : "Filters the resulting set of update-jobs by the target version (required format `<major>.<minor>.<revision>`).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateJobList"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found. See response body for details.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.read` (Read ActiveGates using API V2)" ]
+      },
+      "post" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "Creates a new update job for the specified ActiveGate | maturity=EARLY_ADOPTER",
+        "operationId" : "createUpdateJobForAg",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "JSON body of the request, containing update-job parameters.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateJob"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success. The update-job have been created.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateJob"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.write` (Write ActiveGates using API V2)" ]
+      }
+    },
+    "/activeGates/{agId}/updateJobs/validator" : {
+      "post" : {
+        "tags" : [ "ActiveGates - Auto-update jobs" ],
+        "summary" : "Validates the payload for the `POST /activeGates/{agId}/updateJobs` request. | maturity=EARLY_ADOPTER",
+        "operationId" : "validateUpdateJobForAg",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "JSON body of the request, containing update-job parameters.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateJob"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Validated. The submitted update-job is valid. Response doesn't have a body."
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.write` (Write ActiveGates using API V2)" ]
+      }
+    },
+    "/activeGates" : {
+      "get" : {
+        "tags" : [ "ActiveGates" ],
+        "summary" : "Lists all available ActiveGates | maturity=EARLY_ADOPTER",
+        "description" : "The response includes all ActiveGates that are currently connected to the environment or have been connected during last 2 hours.",
+        "operationId" : "getAllActiveGates",
+        "parameters" : [ {
+          "name" : "hostname",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the name of the host it's running on. \n\n You can specify a partial name. In that case, the `CONTAINS` operator is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "osType",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the OS type of the host it's running on.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "LINUX", "WINDOWS" ]
+          }
+        }, {
+          "name" : "networkAddress",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the network address. \n\n You can specify a partial address. In that case, the `CONTAINS` operator is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the ActiveGate type.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "ENVIRONMENT", "ENVIRONMENT_MULTI" ]
+          }
+        }, {
+          "name" : "networkZone",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the network zone. \n\n You can specify a partial name. In that case, the `CONTAINS` operator is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "updateStatus",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the auto-update status.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "INCOMPATIBLE", "OUTDATED", "SUPPRESSED", "UNKNOWN", "UP2DATE", "UPDATE_IN_PROGRESS", "UPDATE_PENDING", "UPDATE_PROBLEM" ]
+          }
+        }, {
+          "name" : "versionCompareType",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the specified version. \n\n Specify the comparison operator here.",
+          "schema" : {
+            "type" : "string",
+            "enum" : [ "EQUAL", "GREATER", "GREATER_EQUAL", "LOWER", "LOWER_EQUAL" ],
+            "default" : "EQUAL"
+          }
+        }, {
+          "name" : "version",
+          "in" : "query",
+          "description" : "Filters the resulting set of ActiveGates by the specified version. \n\n Specify the version in `<major>.<minor>.<revision>` format (for example, `1.195.0`) here.",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ActiveGateList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.read` (Read ActiveGates using API V2)" ]
+      }
+    },
+    "/activeGates/{agId}" : {
+      "get" : {
+        "tags" : [ "ActiveGates" ],
+        "summary" : "Gets the details of the specified ActiveGate | maturity=EARLY_ADOPTER",
+        "operationId" : "getOneActiveGateById",
+        "parameters" : [ {
+          "name" : "agId",
+          "in" : "path",
+          "description" : "The ID of the required ActiveGate.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ActiveGate"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found. See response body for details.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ACTIVE_GATE_DEPLOYMENT_REST_API",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`activeGates.read` (Read ActiveGates using API V2)" ]
+      }
+    },
+    "/auditlogs/{id}" : {
+      "get" : {
+        "tags" : [ "Audit logs" ],
+        "summary" : "Gets the specified entry of the audit log | maturity=EARLY_ADOPTER",
+        "operationId" : "getLog",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the required log entry.",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 19,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditLogEntry"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. Invalid ID format.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "AUDIT_LOG_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`ReadAuditLogs` (Read audit logs)" ]
+      }
+    },
+    "/auditlogs" : {
+      "get" : {
+        "tags" : [ "Audit logs" ],
+        "summary" : "Gets the audit log of your Dynatrace environment | maturity=EARLY_ADOPTER",
+        "description" : "You can limit the output by using pagination: \n1. Specify the number of results per page in the **pageSize** query parameter. \n2. Use the cursor from the **nextPageKey** field of the previous response in the **nextPageKey** query parameter to obtain subsequent pages.",
+        "operationId" : "getLogs",
+        "parameters" : [ {
+          "name" : "nextPageKey",
+          "in" : "query",
+          "description" : "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The desired amount of log entries in a single response payload. \n\nThe maximal allowed page size is 5000. \n\nIf not set, 1000 is used.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "filter",
+          "in" : "query",
+          "description" : "Filters the audit log. You can use the following criteria: \n* User: `user(\"userIdentification\")`. The `EQUALS` operator applies. \n* Event type: `eventType(\"value\")`. The `EQUALS` operator applies. \n* Category of a logged operation: `category(\"value\")`. The `EQUALS` operator applies. \n* Entity ID: `entityId(\"id\")`. The `CONTAINS` operator applies. \n\nFor each criterion, you can specify multiple alternatives with comma-separated values. In this case, the OR logic applies. For example, `eventType(\"CREATE\",\"UPDATE\")` means eventType can be \"CREATE\" or \"UPDATE\". \n\nYou can specify multiple comma-separated criteria, such as `eventType(\"CREATE\",\"UPDATE\"),category(\"CONFIG\")`. Only results matching **all** criteria are included in response. \n\nSpecify the value of a criterion as a quoted string. The following special characters must be escaped with a tilde (`~`) inside quotes: \n* Tilde `~` \n* Quote `\"`",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the relative timeframe of two weeks is used (`now-2w`).",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the current timestamp is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "sort",
+          "in" : "query",
+          "description" : "The sorting of audit log entries: \n* `timestamp`: Oldest first. \n* `-timestamp`: Newest first. \n\nIf not set, the newest first sorting is applied.",
+          "schema" : {
+            "type" : "string",
+            "default" : "-timestamp"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuditLog"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "AUDIT_LOG_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`ReadAuditLogs` (Read audit logs)" ]
+      }
+    },
+    "/entities" : {
+      "get" : {
+        "tags" : [ "Monitored entities" ],
+        "summary" : "Gets the information about monitored entities | maturity=EARLY_ADOPTER",
+        "description" : "Lists entities observed within the specified timeframe along with their properties. \n\nYou can limit the output by using pagination: \n1. Specify the number of results per page in the **pageSize** query parameter. \n2. Use the cursor from the **nextPageKey** field of the previous response in the **nextPageKey** query parameter to obtain subsequent pages.",
+        "operationId" : "getEntities",
+        "parameters" : [ {
+          "name" : "nextPageKey",
+          "in" : "query",
+          "description" : "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The desired amount of entities in a single response payload. \n\nThe maximal allowed page size is configurable per environment. \n\nIf not set, 50 is used.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "entitySelector",
+          "in" : "query",
+          "description" : "Defines the scope of the query. Only entities matching the specified criteria are included into response. \n\nYou need to set one of these criteria: \n\n* Entity type: `type(\"value\")`. \n* Dynatrace entity ID: `entityId(\"id\")`. You can specify several IDs, separated by a comma (`entityId(\"id-1\",\"id-2\")`). \n\nAnd you can add one or several of the following criteria: \n\n* Tag: `tag(\"value\")`. Tags in `[context]key:value`, `key:value`, and `value` formats are detected and parsed automatically. If a value-only tag has a colon (`:`) in it, you must escape the colon with a backslash(`\\`). Otherwise, the tag will be parsed as a `key:value` tag. All tag values are case-sensitive. \n* Management zone ID: `mzId(\"ID\")` \n* Management zone name: `mzName(\"value\")`. Management zone names are case-sensitive. \n* Dynatrace entity name: `entityName(\"value\")`. You can specify several entity names, separated by a comma (`entityName(\"name-1\",\"name-2\")`). Entity names are case-sensitive. \n* Health state (HEALTHY,UNHEALTHY): `healthState(\"HEALTHY\")`\n\nFurther information can be found [here](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/entity-v2/).\nTo set several criteria, separate them with a comma (`,`). For example, `type(\"HOST\"),healthState(\"HEALTHY\")`. Only results matching **all** criteria are included in response. \n\nThe length of the string is limited to 10,000 characters. \n\nThe field is **required** when you're querying the first page of results.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the relative timeframe of three days is used (`now-3d`).",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the current timestamp is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "description" : "Defines the list of entity properties included in the response. The ID and the name of an entity are **always** included to the response. \n\nTo add properties, list them with leading plus `+`. You can specify several properties, separated by a comma (for example `fields=+lastSeenTms,+properties.BITNESS`). \n\nUse the [GET /entityTypes/{type}](https://www.dynatrace.com/support/help/shortlink/api-entities-v2-get-entity-type) request to fetch the list of properties available for your entity type. Fields from the **properties** object must be specified in the `properties.FIELD` format (for example, `properties.BITNESS`).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntitiesList"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ENTITY_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.read` (Read entities using API V2)" ]
+      }
+    },
+    "/entities/{entityId}" : {
+      "get" : {
+        "tags" : [ "Monitored entities" ],
+        "summary" : "Gets the properties of the specified monitored entity | maturity=EARLY_ADOPTER",
+        "operationId" : "getEntity",
+        "parameters" : [ {
+          "name" : "entityId",
+          "in" : "path",
+          "description" : "The ID of the required entity.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "description" : "Defines the list of entity properties included in the response. The ID and the name of an entity are **always** included to the response. \n\nTo add properties, list them with leading plus `+`. You can specify several properties, separated by a comma (for example `fields=+lastSeenTms,+properties.BITNESS`). \n\nUse the [GET /entityTypes/{type}](https://www.dynatrace.com/support/help/shortlink/api-entities-v2-get-entity-type) request to fetch the list of properties available for your entity type. Fields from the **properties** object must be specified in the `properties.FIELD` format (for example, `properties.BITNESS`).",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Entity"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "ENTITY_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.read` (Read entities using API V2)" ]
+      }
+    },
+    "/entityTypes/{type}" : {
+      "get" : {
+        "tags" : [ "Monitored entities" ],
+        "summary" : "Gets a list of properties for the specified entity type | maturity=EARLY_ADOPTER",
+        "operationId" : "getEntityType",
+        "parameters" : [ {
+          "name" : "type",
+          "in" : "path",
+          "description" : "The required entity type.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityType"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. The requested monitored entity type is not exportable or doesn't exist."
+          }
+        },
+        "x-feature-flag" : "ENTITY_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.read` (Read entities using API V2)" ]
+      }
+    },
+    "/entities/custom" : {
+      "post" : {
+        "tags" : [ "Monitored entities" ],
+        "summary" : "Creates or updates a custom device | maturity=EARLY_ADOPTER",
+        "operationId" : "pushCustomDevice",
+        "requestBody" : {
+          "description" : "The JSON body of the request. Contains parameters of a custom device.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CustomDeviceCreation"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CustomDeviceCreationResult"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Success"
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid."
+          }
+        },
+        "x-feature-flag" : "ENTITY_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.write` (Write entities using API V2)" ]
+      }
+    },
+    "/entityTypes" : {
+      "get" : {
+        "tags" : [ "Monitored entities" ],
+        "summary" : "Gets a list of properties for all entity types | maturity=EARLY_ADOPTER",
+        "description" : "You can limit the output by using pagination: \n1. Specify the number of results per page in the **pageSize** query parameter. \n2. Use the cursor from the **nextPageKey** field of the previous response in the **nextPageKey** query parameter to obtain subsequent pages.",
+        "operationId" : "getEntityTypes",
+        "parameters" : [ {
+          "name" : "nextPageKey",
+          "in" : "query",
+          "description" : "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The desired amount of entity types in a single response payload. \n\nThe maximal allowed page size is 500. \n\nIf not set, 50 is used.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityTypeList"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Failed. There are no more entity types to export."
+          }
+        },
+        "x-feature-flag" : "ENTITY_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.read` (Read entities using API V2)" ]
+      }
+    },
+    "/metrics" : {
+      "get" : {
+        "tags" : [ "Metrics" ],
+        "summary" : "Lists all available metrics",
+        "description" : "You can narrow down the output by selecting metrics in the **metricSelector** field. \n\nYou can additionally limit the output by using pagination: \n\n1. Specify the number of results per page in the **pageSize** query parameter. \n\n2. Then use the cursor from the **nextPageKey** field of the response in the **nextPageKey** query parameter to obtain subsequent pages. All other query parameters must be omitted.",
+        "operationId" : "listDescriptors_1",
+        "parameters" : [ {
+          "name" : "nextPageKey",
+          "in" : "query",
+          "description" : "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The desired amount of primary entities in a single response payload. \n\nThe maximal allowed page size is 5000. \n\nIf not set, 100 is used.\n\n If a value higher than 5000 is used, only 5000 results per page are returned.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "metricSelector",
+          "in" : "query",
+          "description" : "Selects metrics for the query by their keys.\n\n You can specify multiple metric keys separated by commas (for example, `metrickey1,metrickey2`). To select multiple metrics belonging to the same parent, list the last part of the required metric keys in parentheses, separated by commas, while keeping the common part untouched. For example, to list the `builtin:host.cpu.idle` and `builtin:host.cpu.user` metric, write: `builtin:host.cpu.(idle,user)`. \n\nYou can select a full set of related metrics by using a trailing asterisk (`*`) wildcard. For example, `builtin:host.*` selects all host-based metrics and `builtin:*` selects all Dynatrace-provided metrics. \n\nYou can set additional transformation operators, separated by a colon (`:`). See the [Metrics API - selector transformations help page](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) for additional information on available result transformations.\n\n The length of the string is limited to 1,000 characters.\n\n To find metrics based on a search term, rather than metricID, use the **text** query parameter instead of this one.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "text",
+          "in" : "query",
+          "description" : "Metric registry search term. Only show metrics that contain the term in their ID, display name, or description. Use the `metricSelector` parameter instead of this one to select a complete metric hierarchy instead of doing a text-based search.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "fields",
+          "in" : "query",
+          "description" : "Defines the list of metric properties included in the response. \n\n`metricId` is **always** included in the result. The following additional properties are available: \n\n* `displayName`: The name of the metric in the user interface. Enabled by default. \n* `description`: A short description of the metric. Enabled by default. \n* `unit`: The unit of the metric. Enabled by default. \n* `aggregationTypes`: The list of allowed aggregations for the metric. Note that it may be different after a [transformation](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) is applied. \n* `defaultAggregation`: The default aggregation of the metric. It is used when no aggregation is specified or the `:auto` transformation is set. \n* `dimensionDefinitions`: The fine metric division (for example, process group and process ID for some process-related metric). \n* `transformations`: A list of [transformations](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) that can be applied to the metric.\n* `entityType`: A list of entity types supported by the metric.\n\nTo add properties, list them with leading plus `+`. To exclude default properties, list them with leading minus `-`. \n\nTo specify several properties, join them with a comma (for example `fields=+aggregationTypes,-description`).\n\nIf you specify just one property, the response contains the metric key and the specified property.To return metric keys only, specify `metricId` here.",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptorCollection"
+                }
+              },
+              "text/csv; header=present; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptorCollection"
+                }
+              },
+              "text/csv; header=absent; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptorCollection"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Syntax or validation error. **metricSelector** or **fields** have syntactic or semantic errors."
+          },
+          "404" : {
+            "description" : "Not found. The requested resource is not found or the query is incorrect."
+          },
+          "406" : {
+            "description" : "Not acceptable. The requested media type is not supported. Check the **Accept** header of your request."
+          }
+        },
+        "x-token-scopes" : [ "`DataExport` (Access problem and event feed, metrics, and topology)" ]
+      }
+    },
+    "/metrics/query" : {
+      "get" : {
+        "tags" : [ "Metrics" ],
+        "summary" : "Gets data points of the specified metrics",
+        "description" : "The following limits apply: \n* The amount of aggregated data points in the response is limited to 1,000 \n* The amount of series in the response is limited to 1,000 \n   * The amount of data points per series is limited to 10,080 \n   * The overall amount of data points is limited to 100,000 \n",
+        "operationId" : "query_1",
+        "parameters" : [ {
+          "name" : "nextPageKey",
+          "in" : "query",
+          "description" : "The cursor for the next page of results. You can find it in the **nextPageKey** field of the previous response. \n\nThe first page is always returned if you don't specify the **nextPageKey** query parameter. \n\nWhen the **nextPageKey** is set to obtain subsequent pages, you must omit all other query parameters. ",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "description" : "The desired amount of primary entities in a single response payload. \n\nThe maximal allowed page size is 5000. \n\nIf not set, 100 is used.\n\n If a value higher than 5000 is used, only 5000 results per page are returned.",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "metricSelector",
+          "in" : "query",
+          "description" : "Selects metrics for the query by their keys. You can select up to 10 metrics for one query.\n\n You can specify multiple metric keys separated by commas (for example, `metrickey1,metrickey2`). To select multiple metrics belonging to the same parent, list the last part of the required metric keys in parentheses, separated by commas, while keeping the common part untouched. For example, to list the `builtin:host.cpu.idle` and `builtin:host.cpu.user` metric, write: `builtin:host.cpu.(idle,user)`. \n\nYou can set additional transformation operators, separated by a colon (`:`). See the [Metrics API - selector transformations help page](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) for additional information on available result transformations.\n\n If the metric key contains the following characters, they must be escaped with a tilde (`~`): \n\n* Period (`.`) \n* Comma (`,`) \n* Colon (`:`) \n* Opening and closing brackets (`()`) \n* Tilde (`~`) \n\nFor example, to query the metric with the key of **ext:Apache, nginx (Web Servers)** and the dimension of **Index (incl., max ~8)** for the value of `8`, you must specify this selector: `ext:Apache~, nginx ~(Web Servers~):filter(Index ~(incl~.~,max ~~8~),8)`\n\n The length of the string is limited to 1,000 characters.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "resolution",
+          "in" : "query",
+          "description" : "The desired resolution of data points. \n\nYou can use one of the following options: \n* One aggregated data point of each series. Set `Inf` to use this option. \n* The desired amount of data points. This is the default option. This is a reference number of points, which is not necessarily equal to the number of the returned data points. \n* The desired timespan between data points. This is a reference timespan, which is not necessarily equal to the returned timespan. To use this option, specify the unit of the timespan. \n\nValid units for the timespan are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the default is 120 **data points**.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "from",
+          "in" : "query",
+          "description" : "The start of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the relative timeframe of two weeks is used (`now-2w`).",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "to",
+          "in" : "query",
+          "description" : "The end of the requested timeframe. \n\nYou can use one of the following formats: \n* Timestamp in UTC milliseconds. \n* Human-readable format of `2019-12-21T05:57:01.123+01:00`. If no time zone is specified, UTC is used. You can use a space character instead of the `T`. Seconds and fractions of a second are optional. \n* Relative timeframe, back from now. The format is `now-NU/A`, where `N` is the amount of time, `U` is the unit of time, and `A` is an alignment. The alignment rounds all the smaller values to the nearest zero in the past. For example, `now-1y/w` is one year back, aligned by a week. \nYou can also specify relative timeframe without an alignment: `now-NU`. \nSupported time units for the relative timeframe are: \n* `m`: minutes \n* `h`: hours \n* `d`: days \n* `w`: weeks \n* `M`: months \n* `y`: years \n\nIf not set, the current timestamp is used.",
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "entitySelector",
+          "in" : "query",
+          "description" : "Specifies the entity scope of the query. Only data points delivered by matched entities are included in response. \n\nYou need to set one of these criteria: \n\n* Entity type: `type(\"value\")`. \n* Dynatrace entity ID: `entityId(\"id\")`. You can specify several IDs, separated by a comma (`entityId(\"id-1\",\"id-2\")`). \n\nAnd you can add one or several of the following criteria: \n\n* Tag: `tag(\"value\")`. Tags in `[context]key:value`, `key:value`, and `value` formats are detected and parsed automatically. If a value-only tag has a colon (`:`) in it, you must escape the colon with a backslash(`\\`). Otherwise, the tag will be parsed as a `key:value` tag. All tag values are case-sensitive. \n* Management zone ID: `mzId(\"ID\")` \n* Management zone name: `mzName(\"value\")`. Management zone names are case-sensitive. \n* Dynatrace entity name: `entityName(\"value\")`. You can specify several entity names, separated by a comma (`entityName(\"name-1\",\"name-2\")`). Entity names are case-sensitive. \n* Health state (HEALTHY,UNHEALTHY): `healthState(\"HEALTHY\")`\n\nFurther information can be found [here](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/entity-v2/).\nTo set several criteria, separate them with a comma (`,`). For example, `type(\"HOST\"),healthState(\"HEALTHY\")`. Only results matching **all** criteria are included in response. \n\nThe length of the string is limited to 10,000 characters. \n\nUse the [`GET /metrics/{metricId}`](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-get-descriptor) call to fetch the list of possible entity types for your metric. \n\nTo set a universal scope matching all entities, omit this parameter.",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricData"
+                }
+              },
+              "text/csv; header=present; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricData"
+                }
+              },
+              "text/csv; header=absent; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricData"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Syntax or validation error. From and to parameters, scope or resolution are incorrect individually or in their combined meaning."
+          },
+          "403" : {
+            "description" : "Failed. The request is valid but the response is too big to process. Split your query into several queries with limited scopes."
+          },
+          "404" : {
+            "description" : "Not found. The requested resource is not found or the query is incorrect."
+          },
+          "406" : {
+            "description" : "Not acceptable. The requested media type is not supported. Check the **Accept** header of your request."
+          }
+        },
+        "x-token-scopes" : [ "`DataExport` (Access problem and event feed, metrics, and topology)" ]
+      }
+    },
+    "/metrics/{metricId}" : {
+      "get" : {
+        "tags" : [ "Metrics" ],
+        "summary" : "Gets the descriptor of the specified metric",
+        "operationId" : "getSchema_1",
+        "parameters" : [ {
+          "name" : "metricId",
+          "in" : "path",
+          "description" : "The key of the required metric. \n\nYou can set additional transformation operators, separated by a colon (`:`). See the [Metrics API - selector transformations help page](https://www.dynatrace.com/support/help/shortlink/api-metrics-v2-selector) for additional information on available result transformations.\n\n The length of the string is limited to 1,000 characters.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptor"
+                }
+              },
+              "text/csv; header=present; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptor"
+                }
+              },
+              "text/csv; header=absent; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MetricDescriptor"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not found. The requested resource is not found or the query is incorrect."
+          },
+          "406" : {
+            "description" : "Not acceptable. The requested media type is not supported. Check the **Accept** header of your request."
+          }
+        },
+        "x-token-scopes" : [ "`DataExport` (Access problem and event feed, metrics, and topology)" ]
+      }
+    },
+    "/networkZones/{id}" : {
+      "get" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Gets parameters of the specified network zone | maturity=EARLY_ADOPTER",
+        "operationId" : "getSingleNetworkZone",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the required network zone.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NetworkZone"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.read` (Read network zones using API V2)" ]
+      },
+      "put" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Updates an existing network zone or creates a new one | maturity=EARLY_ADOPTER",
+        "description" : "If the network zone with the specified ID does not exist, a new network zone is created. \n\n The ID is not case sensitive. Dynatrace stores the ID in lowercase.",
+        "operationId" : "createOrUpdateNetworkZone",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the network zone to be updated. \n\n If you set the ID in the body as well, it must match this ID. \n\n The ID is not case sensitive. Dynatrace stores the ID in lowercase.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The JSON body of the request. Contains parameters of the network zone.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkZone"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Success. The new network zone has been created. The response body contains the ID of the new network zone.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EntityShortRepresentation"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "Success. The network zone has been updated. Response doesn't have a body."
+          },
+          "400" : {
+            "description" : "Failed. The input is invalid.",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.write` (Write network zones using API V2)" ]
+      },
+      "delete" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Deletes the specified network zone | maturity=EARLY_ADOPTER",
+        "description" : "You can only delete an empty network zone (a zone that no ActiveGate or OneAgent is using). \n\n If the network zone is used as an alternative zone for any OneAgent, it will be automatically removed from the list of possible alternatives.",
+        "operationId" : "deleteNetworkZone",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The ID of the network zone to be deleted.",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Deleted. Response doesn't have a body."
+          },
+          "400" : {
+            "description" : "Failed. See error message in the response body for details.",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.write` (Write network zones using API V2)" ]
+      }
+    },
+    "/networkZones" : {
+      "get" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Lists all existing network zones | maturity=EARLY_ADOPTER",
+        "operationId" : "getAllNetworkZones",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NetworkZoneList"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.read` (Read network zones using API V2)" ]
+      }
+    },
+    "/networkZoneSettings" : {
+      "get" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Gets the global configuration of network zones | maturity=EARLY_ADOPTER",
+        "operationId" : "getNetworkZoneSettings",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NetworkZoneSettings"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.read` (Read network zones using API V2)" ]
+      },
+      "put" : {
+        "tags" : [ "Network zones" ],
+        "summary" : "Updates the global configuration of network zones | maturity=EARLY_ADOPTER",
+        "operationId" : "updateNetworkZoneSettings",
+        "requestBody" : {
+          "description" : "The JSON body of the request. Contains global configuration of network zones.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/NetworkZoneSettings"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Success. The global network zones configuration has been updated. Response doesn't have a body."
+          }
+        },
+        "x-feature-flag" : "NETWORK_ZONE_REST_API_RESOURCE",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`networkZones.write` (Write network zones using API V2)" ]
+      }
+    },
+    "/tags" : {
+      "get" : {
+        "tags" : [ "Monitored entities - Custom tags" ],
+        "summary" : "Gets a list of custom tags applied to the specified entities | maturity=EARLY_ADOPTER",
+        "description" : "Automatically applied tags and imported tags are not included.",
+        "operationId" : "getTags",
+        "parameters" : [ {
+          "name" : "entitySelector",
+          "in" : "query",
+          "description" : "Specifies the entities where you want to read tags. \n\nYou need to set one of these criteria: \n\n* Entity type: `type(\"value\")`. \n* Dynatrace entity ID: `entityId(\"id\")`. You can specify several IDs, separated by a comma (`entityId(\"id-1\",\"id-2\")`). \n\nAnd you can add one or several of the following criteria: \n\n* Tag: `tag(\"value\")`. Tags in `[context]key:value`, `key:value`, and `value` formats are detected and parsed automatically. If a value-only tag has a colon (`:`) in it, you must escape the colon with a backslash(`\\`). Otherwise, the tag will be parsed as a `key:value` tag. All tag values are case-sensitive. \n* Management zone ID: `mzId(\"ID\")` \n* Management zone name: `mzName(\"value\")`. Management zone names are case-sensitive. \n* Dynatrace entity name: `entityName(\"value\")`. You can specify several entity names, separated by a comma (`entityName(\"name-1\",\"name-2\")`). Entity names are case-sensitive. \n* Health state (HEALTHY,UNHEALTHY): `healthState(\"HEALTHY\")`\n\nFurther information can be found [here](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/entity-v2/).\nTo set several criteria, separate them with a comma (`,`). For example, `type(\"HOST\"),healthState(\"HEALTHY\")`. Only results matching **all** criteria are included in response. \n\nThe length of the string is limited to 10,000 characters. \n\n",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CustomEntityTags"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "TAGS_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.read` (Read entities using API V2)" ]
+      },
+      "post" : {
+        "tags" : [ "Monitored entities - Custom tags" ],
+        "summary" : "Adds custom tags to the specified entities | maturity=EARLY_ADOPTER",
+        "description" : "All existing tags remain unaffected.",
+        "operationId" : "postTags",
+        "parameters" : [ {
+          "name" : "entitySelector",
+          "in" : "query",
+          "description" : "Specifies the entities where you want to update tags. \n\nYou need to set one of these criteria: \n\n* Entity type: `type(\"value\")`. \n* Dynatrace entity ID: `entityId(\"id\")`. You can specify several IDs, separated by a comma (`entityId(\"id-1\",\"id-2\")`). \n\nAnd you can add one or several of the following criteria: \n\n* Tag: `tag(\"value\")`. Tags in `[context]key:value`, `key:value`, and `value` formats are detected and parsed automatically. If a value-only tag has a colon (`:`) in it, you must escape the colon with a backslash(`\\`). Otherwise, the tag will be parsed as a `key:value` tag. All tag values are case-sensitive. \n* Management zone ID: `mzId(\"ID\")` \n* Management zone name: `mzName(\"value\")`. Management zone names are case-sensitive. \n* Dynatrace entity name: `entityName(\"value\")`. You can specify several entity names, separated by a comma (`entityName(\"name-1\",\"name-2\")`). Entity names are case-sensitive. \n* Health state (HEALTHY,UNHEALTHY): `healthState(\"HEALTHY\")`\n\nFurther information can be found [here](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/entity-v2/).\nTo set several criteria, separate them with a comma (`,`). For example, `type(\"HOST\"),healthState(\"HEALTHY\")`. Only results matching **all** criteria are included in response. \n\nThe length of the string is limited to 10,000 characters. \n\n",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "The JSON body of the request. Contains tags to be added to the matching entities.",
+          "content" : {
+            "application/json; charset=utf-8" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AddEntityTags"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AddedEntityTags"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "TAGS_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.write` (Write entities using API V2)" ]
+      },
+      "delete" : {
+        "tags" : [ "Monitored entities - Custom tags" ],
+        "summary" : "Deletes the specified tag from the specified entities | maturity=EARLY_ADOPTER",
+        "operationId" : "deleteTags",
+        "parameters" : [ {
+          "name" : "tag",
+          "in" : "query",
+          "description" : "The tag to be deleted.",
+          "schema" : {
+            "minLength" : 1,
+            "type" : "string"
+          }
+        }, {
+          "name" : "entitySelector",
+          "in" : "query",
+          "description" : "Specifies the entities where you want to delete tags. \n\nYou need to set one of these criteria: \n\n* Entity type: `type(\"value\")`. \n* Dynatrace entity ID: `entityId(\"id\")`. You can specify several IDs, separated by a comma (`entityId(\"id-1\",\"id-2\")`). \n\nAnd you can add one or several of the following criteria: \n\n* Tag: `tag(\"value\")`. Tags in `[context]key:value`, `key:value`, and `value` formats are detected and parsed automatically. If a value-only tag has a colon (`:`) in it, you must escape the colon with a backslash(`\\`). Otherwise, the tag will be parsed as a `key:value` tag. All tag values are case-sensitive. \n* Management zone ID: `mzId(\"ID\")` \n* Management zone name: `mzName(\"value\")`. Management zone names are case-sensitive. \n* Dynatrace entity name: `entityName(\"value\")`. You can specify several entity names, separated by a comma (`entityName(\"name-1\",\"name-2\")`). Entity names are case-sensitive. \n* Health state (HEALTHY,UNHEALTHY): `healthState(\"HEALTHY\")`\n\nFurther information can be found [here](https://www.dynatrace.com/support/help/dynatrace-api/environment-api/entity-v2/).\nTo set several criteria, separate them with a comma (`,`). For example, `type(\"HOST\"),healthState(\"HEALTHY\")`. Only results matching **all** criteria are included in response. \n\nThe length of the string is limited to 10,000 characters. \n\n",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json; charset=utf-8" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DeletedEntityTags"
+                }
+              }
+            }
+          }
+        },
+        "x-feature-flag" : "TAGS_REST_API_V2",
+        "x-maturity" : "EARLY_ADOPTER",
+        "x-token-scopes" : [ "`entities.write` (Write entities using API V2)" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ConstraintViolation" : {
+        "type" : "object",
+        "properties" : {
+          "parameterLocation" : {
+            "type" : "string",
+            "enum" : [ "PATH", "PAYLOAD_BODY", "QUERY" ]
+          },
+          "location" : {
+            "type" : "string"
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Error" : {
+        "type" : "object",
+        "properties" : {
+          "constraintViolations" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/ConstraintViolation"
+            }
+          },
+          "message" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "ErrorEnvelope" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "$ref" : "#/components/schemas/Error"
+          }
+        }
+      },
+      "UpdateJob" : {
+        "required" : [ "targetVersion" ],
+        "type" : "object",
+        "properties" : {
+          "jobId" : {
+            "type" : "string",
+            "description" : "The ID of the update job.",
+            "readOnly" : true,
+            "example" : "-3524498778810258605"
+          },
+          "jobState" : {
+            "type" : "string",
+            "description" : "The status of the update job.",
+            "readOnly" : true,
+            "example" : "SUCCEED",
+            "enum" : [ "FAILED", "IN_PROGRESS", "PENDING", "ROLLBACK", "SKIPPED", "SUCCEED" ]
+          },
+          "updateMethod" : {
+            "type" : "string",
+            "description" : "The method of updating the ActiveGate or its component.",
+            "readOnly" : true,
+            "example" : "AUTOMATIC",
+            "enum" : [ "AUTOMATIC", "MANUAL_INSTALLATION", "ON_DEMAND" ]
+          },
+          "updateType" : {
+            "type" : "string",
+            "description" : "The component to be updated.",
+            "readOnly" : true,
+            "example" : "ACTIVE_GATE",
+            "enum" : [ "ACTIVE_GATE", "REMOTE_PLUGIN_AGENT", "SYNTHETIC", "Z_REMOTE" ]
+          },
+          "cancelable" : {
+            "type" : "boolean",
+            "description" : "The job can (`true`) or can't (`false`) be cancelled at the moment.",
+            "readOnly" : true,
+            "example" : false
+          },
+          "startVersion" : {
+            "type" : "string",
+            "description" : "The initial version of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "1.185.0.20200201-120000"
+          },
+          "targetVersion" : {
+            "type" : "string",
+            "description" : "The target version of the update. \n\nSpecify the version in the `<major>.<minor>.<revision>.<timestamp>` format. \n\nTo update to the latest available version, use the `latest` value.",
+            "example" : "1.190.0.20200301-130000"
+          },
+          "timestamp" : {
+            "type" : "integer",
+            "description" : "The timestamp of the update job completion. \n\n The `null` value means the job is still running.",
+            "format" : "int64",
+            "readOnly" : true,
+            "example" : 1582031917814
+          },
+          "agType" : {
+            "type" : "string",
+            "description" : "The type of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "ENVIRONMENT",
+            "enum" : [ "CLUSTER", "ENVIRONMENT", "ENVIRONMENT_MULTI" ]
+          },
+          "environments" : {
+            "type" : "array",
+            "description" : "A list of environments (specified by IDs) the ActiveGate can connect to.",
+            "readOnly" : true,
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "error" : {
+            "type" : "string",
+            "description" : "The information about update error.",
+            "readOnly" : true
+          },
+          "duration" : {
+            "type" : "integer",
+            "description" : "The duration of the update, in milliseconds.",
+            "format" : "int64",
+            "readOnly" : true,
+            "example" : 3608000
+          }
+        },
+        "description" : "Configuration of the ActiveGate update job."
+      },
+      "UpdateJobList" : {
+        "type" : "object",
+        "properties" : {
+          "agId" : {
+            "type" : "string",
+            "description" : "The ID of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "1056821394"
+          },
+          "updateJobs" : {
+            "type" : "array",
+            "description" : "A list of update jobs of the ActiveGate.",
+            "readOnly" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateJob"
+            }
+          }
+        },
+        "description" : "A list of update jobs of the ActiveGate."
+      },
+      "UpdateJobsAll" : {
+        "type" : "object",
+        "properties" : {
+          "allUpdateJobs" : {
+            "type" : "array",
+            "description" : "A list of ActiveGates with update jobs.",
+            "readOnly" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateJobList"
+            }
+          }
+        },
+        "description" : "A list of ActiveGates with update jobs."
+      },
+      "ActiveGate" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "1056821393"
+          },
+          "networkAddresses" : {
+            "type" : "array",
+            "description" : "A list of network addresses of the ActiveGate.",
+            "readOnly" : true,
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "osType" : {
+            "type" : "string",
+            "description" : "The OS type that the ActiveGate is running on.",
+            "readOnly" : true,
+            "example" : "WINDOWS",
+            "enum" : [ "LINUX", "WINDOWS" ]
+          },
+          "autoUpdateStatus" : {
+            "type" : "string",
+            "description" : "The current status of auto-updates of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "OUTDATED",
+            "enum" : [ "INCOMPATIBLE", "OUTDATED", "SUPPRESSED", "UNKNOWN", "UP2DATE", "UPDATE_IN_PROGRESS", "UPDATE_PENDING", "UPDATE_PROBLEM" ]
+          },
+          "offlineSince" : {
+            "type" : "integer",
+            "description" : "The timestamp since when the ActiveGate is offline. \n\n The `null` value means the ActiveGate is online.",
+            "format" : "int64",
+            "readOnly" : true,
+            "example" : 1582031917814
+          },
+          "version" : {
+            "type" : "string",
+            "description" : "The current version of the ActiveGate in the `<major>.<minor>.<revision>.<timestamp>` format.",
+            "readOnly" : true,
+            "example" : "1.185.0.20200201-120000"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "ENVIRONMENT",
+            "enum" : [ "CLUSTER", "ENVIRONMENT", "ENVIRONMENT_MULTI" ]
+          },
+          "hostname" : {
+            "type" : "string",
+            "description" : "The name of the host the ActiveGate is running on.",
+            "readOnly" : true,
+            "example" : "exampleHostname"
+          },
+          "mainEnvironment" : {
+            "type" : "string",
+            "description" : "The ID of the main environment for a multi-environment ActiveGate.",
+            "readOnly" : true,
+            "example" : "d1bf4a7e-666b-43af-9f45-718g98372e2f"
+          },
+          "environments" : {
+            "type" : "array",
+            "description" : "A list of environments (specified by IDs) the ActiveGate can connect to.",
+            "readOnly" : true,
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "networkZone" : {
+            "type" : "string",
+            "description" : "The network zone of the ActiveGate.",
+            "readOnly" : true,
+            "example" : "exampleNetworkZone"
+          }
+        },
+        "description" : "Parameters of the ActiveGate."
+      },
+      "ActiveGateList" : {
+        "type" : "object",
+        "properties" : {
+          "activeGates" : {
+            "type" : "array",
+            "description" : "A list of ActiveGates.",
+            "readOnly" : true,
+            "items" : {
+              "$ref" : "#/components/schemas/ActiveGate"
+            }
+          }
+        },
+        "description" : "A list of ActiveGates."
+      },
+      "Entity" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "array",
+            "description" : "A list of tags assigned to the entity.",
+            "items" : {
+              "$ref" : "#/components/schemas/METag"
+            }
+          },
+          "entityId" : {
+            "type" : "string",
+            "description" : "The ID of the entity."
+          },
+          "toRelationships" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "A list of relationships where the entity occupies the TO position.",
+              "items" : {
+                "$ref" : "#/components/schemas/EntityId"
+              }
+            },
+            "description" : "A list of relationships where the entity occupies the TO position."
+          },
+          "fromRelationships" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "description" : "A list of relationships where the entity occupies the FROM position.",
+              "items" : {
+                "$ref" : "#/components/schemas/EntityId"
+              }
+            },
+            "description" : "A list of relationships where the entity occupies the FROM position."
+          },
+          "managementZones" : {
+            "type" : "array",
+            "description" : "A list of management zones to which the entity belongs.",
+            "items" : {
+              "$ref" : "#/components/schemas/ManagementZone"
+            }
+          },
+          "firstSeenTms" : {
+            "type" : "integer",
+            "description" : "The timestamp at which the entity was first seen, in UTC milliseconds.",
+            "format" : "int64"
+          },
+          "lastSeenTms" : {
+            "type" : "integer",
+            "description" : "The timestamp at which the entity was last seen, in UTC milliseconds.",
+            "format" : "int64"
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : "A list of additional properties of the entity."
+            },
+            "description" : "A list of additional properties of the entity."
+          },
+          "displayName" : {
+            "type" : "string",
+            "description" : "The name of the entity, displayed in the UI."
+          }
+        },
+        "description" : "The properties of a monitored entity.",
+        "example" : {
+          "entityId" : "HOST-06F288EE2A930951",
+          "displayName" : "my host",
+          "firstSeenTms" : 1574697667547,
+          "lastSeenTms" : 1588242361417,
+          "properties" : {
+            "bitness" : 64,
+            "monitoringMode" : "FULL_STACK",
+            "osType" : "LINUX",
+            "osArchitecture" : "X86",
+            "networkZoneId" : "aws.us.east01",
+            "cpuCores" : 8
+          },
+          "tags" : [ {
+            "context" : "CONTEXTLESS",
+            "key" : "architecture",
+            "value" : "x86",
+            "stringRepresentation" : "architecture:x86"
+          }, {
+            "context" : "ENVIRONMENT",
+            "key" : "Infrastructure",
+            "value" : "Linux",
+            "stringRepresentation" : "[ENVIRONMENT]Infrastructure:Linux"
+          } ],
+          "managementZones" : [ {
+            "id" : "6239538939987181652",
+            "name" : "main app"
+          } ],
+          "fromRelationships" : {
+            "isInstanceOf" : [ {
+              "id" : "HOST_GROUP-0E489369D663A4BF",
+              "type" : "HOST_GROUP"
+            } ]
+          },
+          "toRelationships" : {
+            "isDiskOf" : [ {
+              "id" : "DISK-0393340DCA3853B0",
+              "type" : "DISK"
+            } ]
+          }
+        }
+      },
+      "EntityId" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the entity."
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the entity."
+          }
+        },
+        "description" : "A short representation of a monitored entity."
+      },
+      "METag" : {
+        "type" : "object",
+        "properties" : {
+          "stringRepresentation" : {
+            "type" : "string",
+            "description" : "The string representation of the tag."
+          },
+          "value" : {
+            "type" : "string",
+            "description" : "The value of the tag. \n\n Not applicable to custom tags."
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "The key of the tag. \n\n Custom tags have the tag value here."
+          },
+          "context" : {
+            "type" : "string",
+            "description" : "The origin of the tag, such as AWS or Cloud Foundry. \n\n Custom tags use the `CONTEXTLESS` value."
+          }
+        },
+        "description" : "The tag of a monitored entity."
+      },
+      "ManagementZone" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the management zone."
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the management zone."
+          }
+        },
+        "description" : "A short representation of a management zone."
+      },
+      "AuditLogEntry" : {
+        "required" : [ "category", "environmentId", "eventType", "logId", "success", "timestamp", "user", "userType" ],
+        "type" : "object",
+        "properties" : {
+          "logId" : {
+            "maxLength" : 19,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The ID of the log entry.",
+            "readOnly" : true
+          },
+          "eventType" : {
+            "type" : "string",
+            "description" : "The type of the recorded operation.",
+            "readOnly" : true,
+            "enum" : [ "CREATE", "DELETE", "GENERAL", "LOGIN", "LOGOUT", "READ", "UPDATE" ]
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "The category of the recorded operation.",
+            "readOnly" : true,
+            "enum" : [ "CONFIG", "DEBUG_UI", "TOKEN", "WEB_UI" ]
+          },
+          "entityId" : {
+            "type" : "string",
+            "description" : "The ID of an entity from the **category**. \n\n For example, it can be config ID for the `CONFIG` category or token ID for the `TOKEN` category.",
+            "readOnly" : true
+          },
+          "environmentId" : {
+            "type" : "string",
+            "description" : "The ID of the Dynatrace environment where the recorded operation occurred.",
+            "readOnly" : true
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "The ID of the user who performed the recorded operation.",
+            "readOnly" : true
+          },
+          "userType" : {
+            "type" : "string",
+            "description" : "The type of the authentication of the **user**.",
+            "readOnly" : true,
+            "enum" : [ "PUBLIC_TOKEN_IDENTIFIER", "REQUEST_ID", "SERVICE_NAME", "TOKEN_HASH", "USER_NAME" ]
+          },
+          "userOrigin" : {
+            "type" : "string",
+            "description" : "The origin and the IP address of the **user**.",
+            "readOnly" : true
+          },
+          "timestamp" : {
+            "type" : "integer",
+            "description" : "The timestamp of the record creation, in UTC milliseconds.",
+            "format" : "int64",
+            "readOnly" : true
+          },
+          "success" : {
+            "type" : "boolean",
+            "description" : "The recorded operation is successful (`true`) or failed (`false`).",
+            "readOnly" : true
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "The logged message.",
+            "readOnly" : true
+          },
+          "patch" : {
+            "type" : "object",
+            "description" : "The patch of the recorded operation as the JSON representation. \n\n The format is an enhanced RFC 6902. The patch also carries the previous value in the **oldValue** field.",
+            "readOnly" : true
+          }
+        },
+        "description" : "An entry of the audit log.",
+        "example" : {
+          "logId" : "197425568800060000",
+          "eventType" : "UPDATE",
+          "category" : "CONFIG",
+          "entityId" : "MOBILE_RUM: MOBILE_APPLICATION-752C223D59734CD2",
+          "environmentId" : "prod-env-13",
+          "user" : "test.user@company.com",
+          "userType" : "USER_NAME",
+          "userOrigin" : "webui (192.168.0.2)",
+          "timestamp" : 1974255688445,
+          "success" : true,
+          "patch" : [ {
+            "op" : "replace",
+            "path" : "/refreshTimeIntervalMillis",
+            "value" : 30000,
+            "oldValue" : 20000
+          } ]
+        }
+      },
+      "AuditLog" : {
+        "type" : "object",
+        "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The total number of entries in the result.",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "The number of entries per page.",
+            "format" : "int32"
+          },
+          "nextPageKey" : {
+            "type" : "string",
+            "description" : "The cursor for the next page of results. Has the value of `null` on the last page. \n\nUse it in the **nextPageKey** query parameter to obtain subsequent pages of the result.",
+            "example" : "AQAAABQBAAAABQ=="
+          },
+          "auditLogs" : {
+            "type" : "array",
+            "description" : "A list of audit log entries ordered by the creation timestamp.",
+            "items" : {
+              "$ref" : "#/components/schemas/AuditLogEntry"
+            }
+          }
+        },
+        "description" : "The audit log of your environment.",
+        "example" : {
+          "totalCount" : 10,
+          "pageSize" : 5,
+          "nextPageKey" : "___a7acX3q0AAAAAACJidWlsdGluOnNlcnZpY2lUVEJCUzBaNVIxVjJOSGt6Y3oyLTcwMUZWRkxlclH__9rtpxferQ",
+          "auditLogs" : [ {
+            "logId" : "197425568800060000",
+            "eventType" : "UPDATE",
+            "category" : "CONFIG",
+            "entityId" : "MOBILE_RUM: MOBILE_APPLICATION-752C223D59734CD2",
+            "environmentId" : "prod-env-13",
+            "user" : "test.user@company.com",
+            "userType" : "USER_NAME",
+            "userOrigin" : "webui (192.168.0.2)",
+            "timestamp" : 1974255688445,
+            "success" : true,
+            "patch" : [ {
+              "op" : "replace",
+              "path" : "/refreshTimeIntervalMillis",
+              "value" : 30000,
+              "oldValue" : 20000
+            } ]
+          } ]
+        }
+      },
+      "EntitiesList" : {
+        "type" : "object",
+        "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The total number of entries in the result.",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "The number of entries per page.",
+            "format" : "int32"
+          },
+          "nextPageKey" : {
+            "type" : "string",
+            "description" : "The cursor for the next page of results. Has the value of `null` on the last page. \n\nUse it in the **nextPageKey** query parameter to obtain subsequent pages of the result.",
+            "example" : "AQAAABQBAAAABQ=="
+          },
+          "entities" : {
+            "type" : "array",
+            "description" : "A list of monitored entities.",
+            "items" : {
+              "$ref" : "#/components/schemas/Entity"
+            }
+          }
+        },
+        "description" : "A list of monitored entities along with their properties."
+      },
+      "EntityType" : {
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "type" : "string",
+            "description" : "The placeholder for the list of tags of an actual entity."
+          },
+          "toRelationships" : {
+            "type" : "array",
+            "description" : "A list of possible relationships where the monitored entity type occupies the TO position.",
+            "items" : {
+              "$ref" : "#/components/schemas/FromPosition"
+            }
+          },
+          "fromRelationships" : {
+            "type" : "array",
+            "description" : "A list of possible relationships where the monitored entity type occupies the FROM position",
+            "items" : {
+              "$ref" : "#/components/schemas/ToPosition"
+            }
+          },
+          "managementZones" : {
+            "type" : "string",
+            "description" : "The placeholder for the list of management zones of an actual entity."
+          },
+          "properties" : {
+            "type" : "array",
+            "description" : "A list of additional properties of the monitored entity type.",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityTypePropertyDto"
+            }
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the monitored entity."
+          }
+        },
+        "description" : "A list of properties of the monitored entity type.",
+        "example" : {
+          "type" : "HOST",
+          "properties" : [ {
+            "id" : "BITNESS",
+            "type" : "Enum"
+          }, {
+            "id" : "CPU_CORES",
+            "type" : "Number"
+          } ],
+          "tags" : "placeholder for tags",
+          "managementZones" : "placeholder for management zones",
+          "fromRelationships" : [ {
+            "id" : "RUNS_ON_RESOURCE",
+            "toTypes" : [ "CUSTOM_DEVICE" ]
+          }, {
+            "id" : "IS_NETWORK_CLIENT_OF_HOST",
+            "toTypes" : [ "HOST", "CUSTOM_DEVICE" ]
+          } ],
+          "toRelationships" : [ {
+            "id" : "IS_DISK_OF",
+            "fromTypes" : [ "DISK" ]
+          }, {
+            "id" : "IS_SITE_OF",
+            "fromTypes" : [ "VMWARE_DATACENTER", "GEOLOC_SITE" ]
+          } ]
+        }
+      },
+      "EntityTypePropertyDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the property.",
+            "example" : "cpuCores"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the property.",
+            "example" : "Number"
+          }
+        },
+        "description" : "The property of a monitored entity."
+      },
+      "FromPosition" : {
+        "type" : "object",
+        "properties" : {
+          "fromTypes" : {
+            "type" : "array",
+            "description" : "A list of monitored entity types that can occupy the FROM position.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the relationship."
+          }
+        },
+        "description" : "The FROM position of a relationship."
+      },
+      "ToPosition" : {
+        "type" : "object",
+        "properties" : {
+          "toTypes" : {
+            "type" : "array",
+            "description" : "A list of monitored entity types that can occupy the TO position.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the relationship."
+          }
+        },
+        "description" : "The TO position of a relationship."
+      },
+      "CustomDeviceCreationResult" : {
+        "type" : "object",
+        "properties" : {
+          "entityId" : {
+            "type" : "string",
+            "description" : "The Dynatrace entity ID of the custom device."
+          },
+          "groupId" : {
+            "type" : "string",
+            "description" : "The Dynatrace entity ID of the custom device group."
+          }
+        },
+        "description" : "The short representation of a newly created custom device."
+      },
+      "CustomDeviceCreation" : {
+        "required" : [ "customDeviceId", "displayName", "type" ],
+        "type" : "object",
+        "properties" : {
+          "customDeviceId" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The internal ID of the custom device. \n\n If you use the ID of an existing device, the respective parameters will be updated."
+          },
+          "displayName" : {
+            "maxLength" : 1024,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The name of the custom device to be displayed in the user interface."
+          },
+          "group" : {
+            "maxLength" : 512,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "User defined group ID of entity. \n\nThe group ID helps to keep a consistent picture of device-group relations. One of many cases where a proper group is important is service detection: you can define which custom devices should lead to the same service by defining the same group ID for them. \n\nIf you set a group ID, it will be hashed into the Dynatrace entity ID of the custom device. In that case the custom device can only be part of one custom device group. \n\nIf you don't set the group ID, Dynatrace will create it based on the ID or type of the custom device. Also, the group will not be hashed into the device ID which means the device may switch groups."
+          },
+          "ipAddresses" : {
+            "maxItems" : 100,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "The list of IP addresses that belong to the custom device. \n\nThese addresses are used to automatically discover the horizontal communication relationship between this component and all other observed components within Smartscape. Once a connection is discovered, it is automatically mapped and shown within Smartscape. \n\nIf you send a value (including an empty value), the existing values will be overwritten. \n\nIf you send `null` or omit this field, the existing values will be kept.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "listenPorts" : {
+            "maxItems" : 100,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "The list of ports the custom devices listens to. \n\nThese ports are used to discover the horizontal communication relationship between this component and all other observed components within Smartscape. \n\nOnce a connection is discovered, it is automatically mapped and shown within Smartscape. \n\nIf ports are specified, you should also add at least one IP address or a DNS name for the custom device. \n\nIf you send a value, the existing values will be overwritten. \n\nIf you send `null`, or an empty value, or omit this field, the existing values will be kept.",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "type" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The technology type definition of the custom device. \n\nIt must be the same technology type of the metric you're reporting. \n\nIf you send a value (including an empty value), the existing value will be overwritten. \n\nIf you send `null` or omit this field, the existing value will be kept."
+          },
+          "faviconUrl" : {
+            "maxLength" : 2048,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The icon to be displayed for your custom component within Smartscape. Provide the full URL of the icon file."
+          },
+          "configUrl" : {
+            "maxLength" : 2048,
+            "minLength" : 0,
+            "type" : "string",
+            "description" : "The URL of a configuration web page for the custom device, such as a login page for a firewall or router."
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "description" : "The list of key-value pair properties that will be shown beneath the infographics of your custom device."
+            },
+            "description" : "The list of key-value pair properties that will be shown beneath the infographics of your custom device."
+          },
+          "dnsNames" : {
+            "maxItems" : 20,
+            "minItems" : 0,
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "The list of DNS names related to the custom device. \n\nThese names are used to automatically discover the horizontal communication relationship between this component and all other observed components within Smartscape. Once a connection is discovered, it is automatically mapped and shown within Smartscape. \n\nIf you send a value, the existing values will be overwritten. \n\nIf you send `null` or an empty value; or omit this field, the existing values will be kept.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "messageType" : {
+            "type" : "string",
+            "enum" : [ "CUSTOM_DEVICE", "FILTER_VALUE_SUGGESTIONS", "MULTI", "MULTI_TYPE", "SINGLE", "SINGLE_TYPE" ]
+          }
+        },
+        "description" : "Configuration of a custom device.",
+        "example" : {
+          "customDeviceId" : "customDeviceId",
+          "displayName" : "coffeeMachine",
+          "group" : "myCustomDeviceGroup",
+          "ipAddresses" : [ "10.0.0.1" ],
+          "listenPorts" : [ 80 ],
+          "faviconUrl" : "https://www.freefavicon.com/freefavicons/food/cup-of-coffee-152-78475.png",
+          "configUrl" : "http://coffee-machine.dynatrace.internal.com/coffeemachine/manage",
+          "type" : "coffee machine",
+          "properties" : { },
+          "tags" : [ "office-linz" ],
+          "dnsNames" : [ "coffee-machine.dynatrace.internal.com" ]
+        }
+      },
+      "EntityTypeList" : {
+        "type" : "object",
+        "properties" : {
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The total number of entries in the result.",
+            "format" : "int64"
+          },
+          "pageSize" : {
+            "type" : "integer",
+            "description" : "The number of entries per page.",
+            "format" : "int32"
+          },
+          "nextPageKey" : {
+            "type" : "string",
+            "description" : "The cursor for the next page of results. Has the value of `null` on the last page. \n\nUse it in the **nextPageKey** query parameter to obtain subsequent pages of the result.",
+            "example" : "AQAAABQBAAAABQ=="
+          },
+          "types" : {
+            "type" : "array",
+            "description" : "The list of meta information for all available entity-types",
+            "items" : {
+              "$ref" : "#/components/schemas/EntityType"
+            }
+          }
+        },
+        "description" : "A list of properties of all available entity types."
+      },
+      "MetricDefaultAggregation" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "description" : "The type of default aggregation.",
+            "enum" : [ "auto", "avg", "count", "max", "median", "min", "percentile", "sum", "value" ]
+          },
+          "parameter" : {
+            "type" : "number",
+            "description" : "The percentile to be delivered. Valid values are between `0` and `100`. \n\nApplicable only to the `percentile` aggregation type.",
+            "format" : "double"
+          }
+        },
+        "description" : "The default aggregation of a metric."
+      },
+      "MetricDescriptor" : {
+        "type" : "object",
+        "properties" : {
+          "aggregationTypes" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "The list of allowed aggregations for this metric.",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "auto", "avg", "count", "max", "median", "min", "percentile", "sum", "value" ]
+            }
+          },
+          "metricId" : {
+            "type" : "string",
+            "description" : "The fully qualified key of the metric. \n\nIf a transformation has been used it is reflected in the metric key."
+          },
+          "entityType" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "List of admissible primary entity types for this metric. Can be used for the `type` predicate in the `entitySelector`.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "defaultAggregation" : {
+            "$ref" : "#/components/schemas/MetricDefaultAggregation"
+          },
+          "dimensionDefinitions" : {
+            "type" : "array",
+            "description" : "The fine metric division (for example, process group and process ID for some process-related metric).",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricDimensionDefinition"
+            }
+          },
+          "displayName" : {
+            "type" : "string",
+            "description" : "The name of the metric in the user interface."
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "A short description of the metric."
+          },
+          "transformations" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "Transform operators that could be appended to the current transformation list. Must be enabled with the \"fields\" parameter on `/metrics` and is always present on `/metrics/{metricId}`.",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "filter", "fold", "limit", "merge", "names", "parents", "rate", "splitBy" ]
+            }
+          },
+          "unit" : {
+            "type" : "string",
+            "description" : "The unit of the metric.",
+            "enum" : [ "Bit", "BitPerHour", "BitPerMinute", "BitPerSecond", "Byte", "BytePerHour", "BytePerMinute", "BytePerSecond", "Cores", "Count", "Day", "DecibelMilliWatt", "GibiByte", "Giga", "GigaByte", "Hour", "KibiByte", "KibiBytePerHour", "KibiBytePerMinute", "KibiBytePerSecond", "Kilo", "KiloByte", "KiloBytePerHour", "KiloBytePerMinute", "KiloBytePerSecond", "MebiByte", "MebiBytePerHour", "MebiBytePerMinute", "MebiBytePerSecond", "Mega", "MegaByte", "MegaBytePerHour", "MegaBytePerMinute", "MegaBytePerSecond", "MicroSecond", "MilliCores", "MilliSecond", "MilliSecondPerMinute", "Minute", "Month", "NanoSecond", "NanoSecondPerMinute", "NotApplicable", "PerHour", "PerMinute", "PerSecond", "Percent", "Pixel", "Promille", "Ratio", "Second", "State", "Unspecified", "Week", "Year" ]
+          }
+        },
+        "description" : "The descriptor of a metric.",
+        "example" : {
+          "metricId" : "builtin:host.cpu.user:merge(0):max:fold",
+          "displayName" : "CPU user",
+          "description" : "Percentage of user-space CPU time currently utilized, per host.",
+          "unit" : "Percent",
+          "aggregationTypes" : [ "auto", "avg", "max", "min" ],
+          "transformations" : [ "fold" ],
+          "defaultAggregation" : {
+            "type" : "avg"
+          },
+          "dimensionDefinitions" : [ {
+            "name" : "primary",
+            "type" : "ENTITY"
+          } ],
+          "entityType" : [ "HOST" ]
+        }
+      },
+      "MetricDescriptorCollection" : {
+        "type" : "object",
+        "properties" : {
+          "nextPageKey" : {
+            "type" : "string",
+            "description" : "The cursor for the next page of results. Has the value of `null` on the last page. \n\nUse it in the **nextPageKey** query parameter to obtain subsequent pages of the result."
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The estimated number of metrics in the result.",
+            "format" : "int64"
+          },
+          "metrics" : {
+            "type" : "array",
+            "description" : "A list of metric along with their descriptors",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricDescriptor"
+            }
+          }
+        },
+        "description" : "A list of metrics along with their descriptors.",
+        "example" : {
+          "totalCount" : 3,
+          "nextPageKey" : "ABCDEFABCDEFABCDEF_",
+          "metrics" : [ {
+            "metricId" : "builtin:host.cpu.idle",
+            "displayName" : "CPU idle",
+            "description" : "Percentage of CPU time not being utilized, per host.",
+            "unit" : "Percent",
+            "aggregationTypes" : [ "auto", "avg", "max", "min" ],
+            "transformations" : [ "filter", "fold", "merge", "names", "parents" ],
+            "defaultAggregation" : {
+              "type" : "avg"
+            },
+            "dimensionDefinitions" : [ {
+              "name" : "primary",
+              "type" : "ENTITY"
+            } ],
+            "entityType" : [ "HOST" ]
+          }, {
+            "metricId" : "builtin:host.cpu.user",
+            "displayName" : "CPU idle",
+            "description" : "Percentage of CPU utilized in user space, per host.",
+            "unit" : "Percent",
+            "aggregationTypes" : [ "auto", "avg", "max", "min" ],
+            "transformations" : [ "filter", "fold", "merge", "names", "parents" ],
+            "defaultAggregation" : {
+              "type" : "avg"
+            },
+            "dimensionDefinitions" : [ {
+              "name" : "primary",
+              "type" : "ENTITY"
+            } ],
+            "entityType" : [ "HOST" ]
+          } ]
+        }
+      },
+      "MetricDimensionDefinition" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the dimension."
+          },
+          "key" : {
+            "type" : "string",
+            "description" : "The key of the dimension. \n\n It must be unique within the metric."
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of the dimension.",
+            "enum" : [ "ENTITY", "NUMBER", "OTHER", "STRING", "VOID" ]
+          },
+          "index" : {
+            "type" : "integer",
+            "description" : "The unique 0-based index of the dimension. \n\n Appending transformations such as :names or :parents may change the indexes of dimensions. `null` is used for the dimensions of a metric with flexible dimensions, which can be referenced with their dimension key, but do not have an intrinsic order that could be used for the index.",
+            "format" : "int32"
+          }
+        },
+        "description" : "The dimension of a metric."
+      },
+      "MetricData" : {
+        "type" : "object",
+        "properties" : {
+          "nextPageKey" : {
+            "type" : "string",
+            "description" : "The cursor for the next page of results. Has the value of `null` on the last page. \n\nUse it in the **nextPageKey** query parameter to obtain subsequent pages of the result."
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The total number of primary entities in the result. \n\nHas the `0` value if none of the requested metrics is suitable for pagination.",
+            "format" : "int64"
+          },
+          "result" : {
+            "type" : "array",
+            "description" : "A list of metrics and their data points.",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricSeriesCollection"
+            }
+          },
+          "warnings" : {
+            "type" : "array",
+            "description" : "A list of warnings",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "description" : "A list of metrics and their data points.",
+        "example" : {
+          "totalCount" : 3,
+          "nextPageKey" : "ABCDEFABCDEFABCDEF_",
+          "result" : [ {
+            "metricId" : "builtin:host.disk.avail",
+            "data" : [ {
+              "dimensions" : [ "HOST-F1266E1D0AAC2C3C", "DISK-F1266E1D0AAC2C3F" ],
+              "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+              "values" : [ 11.1, 22.2, 33.3 ]
+            }, {
+              "dimensions" : [ "HOST-F1266E1D0AAC2C3C", "DISK-F1266E1D0AAC2C3D" ],
+              "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+              "values" : [ 111.1, 222.2, 333.3 ]
+            } ]
+          }, {
+            "metricId" : "builtin:host.cpu.idle",
+            "data" : [ {
+              "dimensions" : [ "HOST-F1266E1D0AAC2C3C" ],
+              "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+              "values" : [ 1.1, 2.2, 3.3 ]
+            } ]
+          } ]
+        }
+      },
+      "MetricSeries" : {
+        "type" : "object",
+        "properties" : {
+          "timestamps" : {
+            "type" : "array",
+            "description" : "A list of timestamps of data points. \n\nThe value of data point for each time from this array is located in **values** array at the same index.",
+            "items" : {
+              "type" : "integer",
+              "format" : "int64"
+            }
+          },
+          "values" : {
+            "type" : "array",
+            "description" : "A list of values of data points. \n\nThe timestamp of data point for each value from this array is located in **timestamps** array at the same index.",
+            "items" : {
+              "type" : "number",
+              "format" : "double"
+            }
+          },
+          "dimensions" : {
+            "type" : "array",
+            "description" : "The ordered list of dimensions to which the data point list belongs. \n\n Each metric can have a certain number of dimensions. Dimensions exceeding this number are aggregated into one, which is shown as `null` here.",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "description" : "Data points per dimension of a metric. \n\nThe data is represented by two arrays of the same length: **timestamps** and **values**. Entries of the same index from both arrays form a timestamped data point.",
+        "example" : {
+          "dimensions" : [ "HOST-F1266E1D0AAC2C3C" ],
+          "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+          "values" : [ 1.1, 2.2, 3.3 ]
+        }
+      },
+      "MetricSeriesCollection" : {
+        "type" : "object",
+        "properties" : {
+          "metricId" : {
+            "type" : "string",
+            "description" : "The key of the metric. \n\nIf any transformation is applied, it is included here."
+          },
+          "data" : {
+            "type" : "array",
+            "description" : "Data points of the metric.",
+            "items" : {
+              "$ref" : "#/components/schemas/MetricSeries"
+            }
+          }
+        },
+        "description" : "Data points of a metric.",
+        "example" : {
+          "metricId" : "builtin:host.disk.avail",
+          "data" : [ {
+            "dimensions" : [ "HOST-F1266E1D0AAC2C3C", "DISK-F1266E1D0AAC2C3F" ],
+            "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+            "values" : [ 11.1, 22.2, 33.3 ]
+          }, {
+            "dimensions" : [ "HOST-F1266E1D0AAC2C3C", "DISK-F1266E1D0AAC2C3D" ],
+            "timestamps" : [ 3151435100000, 3151438700000, 3151442300000 ],
+            "values" : [ 111.1, 222.2, 333.3 ]
+          } ]
+        }
+      },
+      "EntityShortRepresentation" : {
+        "required" : [ "id" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the Dynatrace entity."
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the Dynatrace entity.",
+            "readOnly" : true
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "A short description of the Dynatrace entity.",
+            "readOnly" : true
+          }
+        },
+        "description" : "The short representation of a Dynatrace entity.",
+        "example" : {
+          "id" : "6a98d7bc-abb9-44f8-ae6a-73e68e71812a",
+          "name" : "Dynatrace entity",
+          "description" : "Dynatrace entity for the REST API example"
+        }
+      },
+      "NetworkZone" : {
+        "type" : "object",
+        "properties" : {
+          "numOfConfiguredOneAgents" : {
+            "type" : "integer",
+            "description" : "The number of OneAgents that are configured to use the network zone as primary.",
+            "format" : "int32",
+            "readOnly" : true
+          },
+          "numOfOneAgentsFromOtherZones" : {
+            "type" : "integer",
+            "description" : "The number of OneAgents from other network zones that are using ActiveGates in the network zone. \n\n This is a fraction of **numOfOneAgentsUsing**. \n\nOne possible reason for switching to another zone is that a firewall is preventing a OneAgent from connecting to any ActiveGate in the preferred network zone.\n\n",
+            "format" : "int32",
+            "readOnly" : true
+          },
+          "numOfConfiguredActiveGates" : {
+            "type" : "integer",
+            "description" : "The number of ActiveGates in the network zone.",
+            "format" : "int32",
+            "readOnly" : true
+          },
+          "alternativeZones" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "description" : "A list of alternative network zones.",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "numOfOneAgentsUsing" : {
+            "type" : "integer",
+            "description" : "The number of OneAgents that are using ActiveGates in the network zone.",
+            "format" : "int32",
+            "readOnly" : true
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "The ID of the network zone",
+            "readOnly" : true
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "A short description of the network zone"
+          }
+        },
+        "description" : "Configuration of a network zone."
+      },
+      "NetworkZoneList" : {
+        "required" : [ "networkZones" ],
+        "type" : "object",
+        "properties" : {
+          "networkZones" : {
+            "type" : "array",
+            "description" : "A list of network zones.",
+            "items" : {
+              "$ref" : "#/components/schemas/NetworkZone"
+            }
+          }
+        },
+        "description" : "A list of network zones."
+      },
+      "NetworkZoneSettings" : {
+        "type" : "object",
+        "properties" : {
+          "networkZonesEnabled" : {
+            "type" : "boolean",
+            "description" : "Network zones feature is enabled (`true`) or disabled (`false`)."
+          }
+        },
+        "description" : "Global network zone configuration."
+      },
+      "CustomEntityTags" : {
+        "required" : [ "tags" ],
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "uniqueItems" : true,
+            "type" : "array",
+            "properties" : {
+              "empty" : {
+                "type" : "boolean"
+              }
+            },
+            "description" : "A list of custom tags.",
+            "items" : {
+              "$ref" : "#/components/schemas/METag"
+            }
+          },
+          "totalCount" : {
+            "type" : "integer",
+            "description" : "The total number of tags in the response.",
+            "format" : "int64"
+          }
+        },
+        "description" : "A list of custom tags.",
+        "example" : {
+          "totalCount" : 2,
+          "tags" : [ {
+            "context" : "CONTEXTLESS",
+            "key" : "mainApp",
+            "stringRepresentation" : "mainApp"
+          }, {
+            "context" : "CONTEXTLESS",
+            "key" : "bookings",
+            "stringRepresentation" : "bookings"
+          } ]
+        }
+      },
+      "AddedEntityTags" : {
+        "type" : "object",
+        "properties" : {
+          "matchedEntitiesCount" : {
+            "type" : "integer",
+            "description" : "The number of monitored entities where the tags have been added.",
+            "format" : "int64"
+          },
+          "appliedTags" : {
+            "type" : "array",
+            "properties" : {
+              "empty" : {
+                "type" : "boolean"
+              }
+            },
+            "description" : "A list of added custom tags.",
+            "items" : {
+              "$ref" : "#/components/schemas/METag"
+            }
+          }
+        },
+        "description" : "A list of custom tags added to monitored entities.",
+        "example" : {
+          "appliedTags" : [ {
+            "context" : "CONTEXTLESS",
+            "key" : "mainApp",
+            "stringRepresentation" : "mainApp"
+          }, {
+            "context" : "CONTEXTLESS",
+            "key" : "booking",
+            "stringRepresentation" : "booking"
+          } ],
+          "matchedEntitiesCount" : 2
+        }
+      },
+      "AddEntityTag" : {
+        "required" : [ "key" ],
+        "type" : "object",
+        "properties" : {
+          "key" : {
+            "maxLength" : 100,
+            "minLength" : 1,
+            "type" : "string",
+            "description" : "The key of the custom tag to be added to monitored entities."
+          }
+        },
+        "description" : "The custom tag to be added to monitored entities."
+      },
+      "AddEntityTags" : {
+        "required" : [ "tags" ],
+        "type" : "object",
+        "properties" : {
+          "tags" : {
+            "maxItems" : 1000,
+            "minItems" : 0,
+            "type" : "array",
+            "description" : "A list of tags to be added to monitored entities.",
+            "items" : {
+              "$ref" : "#/components/schemas/AddEntityTag"
+            }
+          }
+        },
+        "description" : "A list of tags to be added to monitored entities.",
+        "example" : {
+          "tags" : [ {
+            "key" : "mainApp"
+          }, {
+            "key" : "bookings"
+          } ]
+        }
+      },
+      "DeletedEntityTags" : {
+        "type" : "object",
+        "properties" : {
+          "matchedEntitiesCount" : {
+            "type" : "integer",
+            "description" : "The number of monitored entities where the tag has been deleted.",
+            "format" : "int64"
+          },
+          "deletedTag" : {
+            "$ref" : "#/components/schemas/METag"
+          }
+        },
+        "description" : "Deleted custom tag.",
+        "example" : {
+          "deletedTag" : {
+            "context" : "CONTEXTLESS",
+            "key" : "booking",
+            "stringRepresentation" : "booking"
+          },
+          "matchedEntitiesCount" : 2
+        }
+      }
+    },
+    "securitySchemes" : {
+      "Api-Token" : {
+        "type" : "apiKey",
+        "description" : "Dynatrace API Token\n\n The token is passed in the **Authorization** header in the following format: `Authorization: Api-Token abcdefjhij1234567890`.",
+        "name" : "Authorization",
+        "in" : "header"
+      }
+    }
+  }
+}
